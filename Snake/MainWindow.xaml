@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="681.469" Width="920.655" KeyDown="Window_KeyDown">
     <Grid Visibility="Visible">
-        <Button Content="Start" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
 
         <Label Content="Score" Height="49" HorizontalAlignment="Left" Margin="718,0,0,0" Name="label1" VerticalAlignment="Top" FontFamily="Showcard Gothic" FontSize="30" Width="124" />
         <Label Content="0" Height="50" HorizontalAlignment="Left" Margin="718,54,0,0" Name="lblScore" VerticalAlignment="Top" Width="158" FontFamily="Showcard Gothic" FontSize="30" />
@@ -12,7 +11,10 @@
 
         </Canvas>
         <TextBlock Height="300" Name="tbGameOver" Text="   Game Over!" Width="300" FontFamily="Levenim MT" FontSize="36" Background="#79483232" Foreground="#FFFC0000" Visibility="Hidden" Margin="111,12,164,12" />
-        <ProgressBar HorizontalAlignment="Left" Height="24" Margin="111,617,0,0" VerticalAlignment="Top" Width="498" Value="60"/>
-        <Label x:Name="label" Content="х 4" HorizontalAlignment="Left" Margin="614,610,0,0" VerticalAlignment="Top" Width="97" FontFamily="LCDMono2" FontSize="30"/>
+        <Label x:Name="label2" Content="Bonus X10" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Background="White" Foreground="Red" Height="52" Width="96" FontSize="16"  Visibility="Collapsed"/>
+        <Button Content="Start" Height="54" HorizontalAlignment="Left" Margin="336,519,0,0" x:Name="button1" VerticalAlignment="Top" Width="150" Click="button1_Click" Foreground="#FF1B5F35" FontSize="40" Background="{x:Null}" BorderBrush="{x:Null}" />
+        <Label x:Name="label3" Content="+1000" HorizontalAlignment="Left" Margin="697,79,0,0" VerticalAlignment="Top" FontSize="30" RenderTransformOrigin="0.375,0.542" Visibility ="Hidden"/>
+        <Label x:Name="label4" Content="+10000" HorizontalAlignment="Left" Margin="697,79,0,0" VerticalAlignment="Top" FontSize="30" RenderTransformOrigin="0.375,0.542" Visibility ="Hidden"/>
+        <Label x:Name="label5" Content="0:00" HorizontalAlignment="Left" Margin="727,134,0,0" VerticalAlignment="Top" FontSize="30" Foreground="Red" Visibility ="Hidden"/>
     </Grid>
 </Window>

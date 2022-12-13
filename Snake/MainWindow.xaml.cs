@@ -28,8 +28,17 @@ namespace Snake
         List<PositionedEntity> snake;
         // яблоко
         Apple apple;
+
+        Bonus bonus;
+
         //количество очков
         int score;
+        int Time = 0;
+        int bonusTime = 0;
+        int TimeText = 0;
+        int bonuss = 1; 
+
+
         //таймер по которому 
         DispatcherTimer moveTimer;
         
@@ -46,7 +55,7 @@ namespace Snake
             moveTimer = new DispatcherTimer();
             moveTimer.Interval = new TimeSpan(0, 0, 0, 0, 300);
             moveTimer.Tick += new EventHandler(moveTimer_Tick);
-            
+
         }
 
         //метод перерисовывающий экран
@@ -58,11 +67,15 @@ namespace Snake
                 Canvas.SetTop(p.image, p.y);
                 Canvas.SetLeft(p.image, p.x);
             }
-
+            button1.Visibility = Visibility.Collapsed;
             //обновляем положение яблока
             Canvas.SetTop(apple.image, apple.y);
             Canvas.SetLeft(apple.image, apple.x);
-            
+
+            //обновляем положение бонуса
+            Canvas.SetTop(bonus.image, bonus.y);
+            Canvas.SetLeft(bonus.image, bonus.x);
+
             //обновляем количество очков
             lblScore.Content = String.Format("{0}000", score);
         }
@@ -85,6 +98,7 @@ namespace Snake
                     //мы проиграли
                     moveTimer.Stop();
                     tbGameOver.Visibility = Visibility.Visible;
+                    button1.Visibility = Visibility.Visible;
                     return;
                 }
             }
@@ -101,14 +115,60 @@ namespace Snake
             //проверяем, что голова змеи врезалась в яблоко
             if (head.x == apple.x && head.y == apple.y)
             {
+                if (bonuss == 1)
+                { label3.Visibility = Visibility.Visible; }
+                if (bonuss == 10)
+                { label4.Visibility = Visibility.Visible; }
                 //увеличиваем счет
-                score++;
+                score = score + bonuss;
                 //двигаем яблоко на новое место
                 apple.move();
                 // добавляем новый сегмент к змее
                 var part = new BodyPart(snake.Last());
                 canvas1.Children.Add(part.image);
                 snake.Add(part);
+            }
+            TimeText++;
+            if(TimeText % 7 == 0)
+            {
+                label3.Visibility = Visibility.Collapsed;
+                label4.Visibility = Visibility.Collapsed;
+            }
+            if(TimeText > 9)
+            {
+                TimeText = 0;
+            }
+            if (bonuss == 10 && bonusTime != 90)
+            {
+                bonusTime++;
+            }
+            else
+            {
+                label2.Visibility = Visibility.Collapsed;
+                bonuss = 1;
+                bonusTime = 0;
+            }
+            if (bonuss == 10)
+            {
+                label5.Visibility = Visibility.Visible;
+                if (TimeText % 3 == 0)
+                {
+                    Time++;
+                    label5.Content = String.Format("0:{00}", Time);
+                }
+            }
+            else
+            {
+                label5.Visibility = Visibility.Collapsed;
+            }
+            // Проверяем что голова змеи врезался в бонус
+            if (head.x == bonus.x && head.y == bonus.y)
+            {
+                label2.Visibility = Visibility.Visible;
+                //увеличиваем счет
+                bonuss = 10;
+                //двигаем яблоко на новое место
+                bonus.move();
             }
             //перерисовываем экран
             UpdateField();
@@ -151,6 +211,9 @@ namespace Snake
             // создаем новое яблоко и добавлем его
             apple = new Apple(snake);
             canvas1.Children.Add(apple.image);
+
+            bonus = new Bonus(snake);
+            canvas1.Children.Add(bonus.image);
             // создаем голову
             head = new Head();
             snake.Add(head);
@@ -239,6 +302,38 @@ namespace Snake
             public override void move()
             {
                 Random rand = new Random();
+                do
+                {
+                    x = rand.Next(13) * 40 + 40;
+                    y = rand.Next(13) * 40 + 40;
+                    bool overlap = false;
+                    foreach (var p in m_snake)
+                    {
+                        if (p.x == x && p.y == y)
+                        {
+                            overlap = true;
+                            break;
+                        }
+                    }
+                    if (!overlap)
+                        break;
+                } while (true);
+
+            }
+        }
+        public class Bonus : PositionedEntity
+        {
+            List<PositionedEntity> m_snake;
+            public Bonus(List<PositionedEntity> s)
+                : base(0, 0, 40, 40, "pack://application:,,,/Resources/bomb64.png")
+            {
+                m_snake = s;
+                move();
+            }
+
+            public override void move()
+            {
+                Random rand = new Random(DateTime.Now.Millisecond);
                 do
                 {
                     x = rand.Next(13) * 40 + 40;
